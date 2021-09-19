@@ -31,15 +31,22 @@ class NetworkHistory:
                 # Get store name at position 4 and MAC address at position 5
                 (n, name, t) = EnumValue(guid_key, 4)
                 (n, address, t) = EnumValue(guid_key, 5)
-                # Convert MAC address to hex from binary
-                mac_address = str(address.hex(":")).upper()
+
+                manufacturer = "(Unknown)"
+
+                # Process MAC address if data exists in registry
+                if address is not None:
+                    # Convert MAC address to hex from binary
+                    mac_address = str(address.hex(":")).upper()
+                    # Create OUI octet
+                    mac_octet = mac_address[0:2] + mac_address[3:5] + mac_address[6:8]
+                    manufacturer = get_oui_manufacturer(mac_octet)
+                else:
+                    mac_address = "MAC Unknown"
+
                 network_name = str(name)
                 # Get first connected and last used date from the Windows registry for the network name
                 first_connected, last_used = self.get_network_profile_dates(network_name)
-
-                # Create OUI octet
-                mac_octet = mac_address[0:2] + mac_address[3:5] + mac_address[6:8]
-                manufacturer = get_oui_manufacturer(mac_octet)
 
                 print('[+] ' + network_name + ' ' + mac_address + ' ' + manufacturer)
 
@@ -74,6 +81,7 @@ class NetworkHistory:
         if self.outfile != "":
             with open(self.outfile, "w") as f:
                 f.write(serialized_json)
+                print("Wrote JSON to file: " + self.outfile)
 
     def get_network_profile_dates(self, network_name):
         profile_path = r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles"
