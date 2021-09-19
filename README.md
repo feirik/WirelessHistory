@@ -1,5 +1,5 @@
 ### Brief
-Simple program for reading the Windows registry for wireless history information.
+Simple program for reading the Windows registry for wireless history information. Outputs name of network, MAC if defined, MAC manufacturer, date created and date last used.
 
 
 #### Usage: python3 wirelessHistory.py [-o]
