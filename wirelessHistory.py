@@ -137,12 +137,18 @@ class NetworkHistory:
         return f"{day}-{month}-{year} {hour}:{minute}"
 
 
-parser = argparse.ArgumentParser(description='Simple application for reading Windows registers for stored wireless network info.')
-parser.add_argument("-o", "--outfile", type=str,
-                                       help="Optional output file path if you want to store results in JSON format.",
-                                       default="")
+def main():
+    parser = argparse.ArgumentParser(description='Simple application for reading Windows registers for stored wireless network info.')
+    parser.add_argument("-o", "--outfile", type=str,
+                                           help="Optional output file path if you want to store results in JSON format.",
+                                           default="")
 
-args = parser.parse_args()
+    args = parser.parse_args()
 
-history = NetworkHistory(args.outfile)
-history.print_stored_networks()
+    history = NetworkHistory(args.outfile)
+    history.print_stored_networks()
+
+
+if __name__ == "__main__":
+    main()
+    
